@@ -1,0 +1,26 @@
+{
+  "name": "auto-bombadil",
+  "version": "1.0.0",
+  "scripts": {
+    "test:ui": "sh -c 'bombadil browser test --headless --time-limit=\"${BOMBADIL_TIME_LIMIT:-1m}\" --exit-on-violation --output-path=bombadil-output --output-path-overwrite \"$@\" \"$0\" bombadil/specification.ts'",
+    "inspect:ui": "bombadil browser inspect bombadil-output",
+    "typecheck:ui": "tsc -p bombadil/tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhedin/auto-bombadil.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jhedin/auto-bombadil/issues"
+  },
+  "homepage": "https://github.com/jhedin/auto-bombadil#readme",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@antithesishq/bombadil": "^0.7.5",
+    "typescript": "^7.0.2"
+  }
+}

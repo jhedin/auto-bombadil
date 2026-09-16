@@ -18,3 +18,21 @@ judgments and probabilities from System One models (Jev) that code composes.
 ```bash
 npx skills add typesafe-ai/skills --skill typesafe-ai -a claude-code -y
 ```
+
+## Bombadil (UI property-based testing)
+
+[Bombadil](https://github.com/antithesishq/bombadil) explores the UI
+autonomously and checks properties. It is installed as a dev dependency
+(`@antithesishq/bombadil`, which bundles the CLI binary and TypeScript types).
+
+- Specification: `bombadil/specification.ts`. It re-exports the browser
+  defaults; add domain-specific properties and action generators next to them.
+  Manual: https://antithesishq.github.io/bombadil/
+- Run against a running app: `npm run test:ui -- http://localhost:3000`.
+  Extra CLI flags go after the URL. `BOMBADIL_TIME_LIMIT` overrides the
+  default 1 minute. Results land in `bombadil-output/` (gitignored).
+- Inspect a run: `npm run inspect:ui`. Type-check specs: `npm run typecheck:ui`.
+- Bombadil finds Chromium via the `CHROME` env var or on PATH. In a root
+  container pass `--no-sandbox`. With a Chromium older than the one Bombadil
+  targets, also pass `--chrome-grant-permissions=` (the default grant list
+  includes `local-network`, which older builds reject).
