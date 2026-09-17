@@ -3,7 +3,10 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "target": "esnext",
-    "lib": ["es2021", "dom"],
+    "lib": [
+      "es2021",
+      "dom"
+    ],
     "types": [],
     "strict": true,
     "noEmit": true,
@@ -13,7 +16,16 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "erasableSyntaxOnly": true,
+    "paths": {
+      "@antithesishq/bombadil/browser/dom": [
+        "../node_modules/@antithesishq/bombadil/dist/browser/dom.d.ts"
+      ]
+    }
   },
-  "include": ["./**/*.ts"]
+  "include": [
+    "./**/*.ts"
+  ]
 }

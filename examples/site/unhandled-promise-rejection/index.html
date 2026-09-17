@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Unhandled Promise Rejection</title>
+    <style>
+      button {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <p><a href="../index.html">Home</a></p>
+<button id="a">A</button>
+
+    <script>
+      function run() {
+        return new Promise((resolve, reject) => {
+          const button = document.querySelector("button");
+          let count = 0;
+          button.addEventListener("click", event => {
+            count++;
+            if (count >= 3) {
+              reject("oh no you pressed too much");
+            }
+          });
+        });
+      }
+      run();
+    </script>
+  </body>
+</html>

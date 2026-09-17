@@ -36,3 +36,17 @@ autonomously and checks properties. It is installed as a dev dependency
   container pass `--no-sandbox`. With a Chromium older than the one Bombadil
   targets, also pass `--chrome-grant-permissions=` (the default grant list
   includes `local-network`, which older builds reject).
+
+## auto-bombadil loop
+
+See README.md for the full loop. Key points for changes:
+
+- Deterministic facts stay in code (`src/link.ts` checks link targets exist;
+  `src/weights.ts` owns the risk formula and the exploration floor). Jev only
+  answers narrow questions about a control's source in `src/judge.ts`.
+- `bombadil/key.ts` is shared between the spec (runs in Bombadil's embedded
+  JS engine, no Node APIs, no network) and the Node tooling. Keep it plain.
+- Judgments are cached in `.auto-bombadil/judgments.json` by code hash.
+  Changing a question in `src/judge.ts` needs a cache clear to take effect.
+- Run `npm run typecheck` before committing. Node runs the `.ts` sources
+  directly via type stripping, so avoid enums and parameter properties.

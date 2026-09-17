@@ -1,7 +1,6 @@
 /**
- * Jev-weighted specification: clicks are sampled by the weights in
- * ./weights.json, which `npm run auto:weights` regenerates from a trace.
- * Everything else is Bombadil's defaults.
+ * Baseline specification: identical to specification.ts but every click
+ * target gets the same weight. Used by `npm run auto:compare`.
  */
 import { weighted } from "@antithesishq/bombadil/browser";
 import {
@@ -11,7 +10,7 @@ import {
   waitOnce,
 } from "@antithesishq/bombadil/browser/defaults/actions";
 import { weightedClicks, type WeightTable } from "./policy.ts";
-import table from "./weights.json" with { type: "json" };
+import table from "./uniform.json" with { type: "json" };
 
 export {
   noHttpErrorCodes,

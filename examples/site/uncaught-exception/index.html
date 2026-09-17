@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Uncaught Exception</title>
+    <style>
+      button {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <p><a href="../index.html">Home</a></p>
+<button id="a">A</button>
+
+    <script>
+      const button = document.querySelector("button");
+      let count = 0;
+      button.addEventListener("click", event => {
+        count++;
+        if (count >= 3) {
+          throw new Error("oh no you pressed too much");
+        }
+      });
+    </script>
+  </body>
+</html>

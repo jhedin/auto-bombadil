@@ -1,0 +1,7 @@
+MIT License
+
+Copyright (c) 2024 Antithesis
+
+The pages under this directory are copied from the Bombadil integration tests
+(https://github.com/antithesishq/bombadil, lib/bombadil-browser-integration-tests/tests)
+and are used here as example applications under their MIT license.

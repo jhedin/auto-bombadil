@@ -11,3 +11,6 @@ __pycache__/
 
 # Bombadil test output (traces, screenshots)
 bombadil-output/
+
+# auto-bombadil working data (traces, judgment cache)
+.auto-bombadil/
