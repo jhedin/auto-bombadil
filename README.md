@@ -172,3 +172,22 @@ once the fuzzer could brute-force this bug in seconds. That is the honest
 shape of the result: steering pays in proportion to how costly a wasted
 action is and how rare the bug is. On this app with fast inputs the bug is
 three cheap actions from the start, and nothing beats random.
+
+### TodoMVC, jQuery
+
+Four runs each, 60 second cap, fast inputs, weights from the final table
+(Clear-completed ranked second, flagged for route sync). Every violation was
+`selectedFilterMatchesRoute`.
+
+| Policy | Runs with a violation | Mean time to first violation | Median | Per run |
+| --- | --- | --- | --- | --- |
+| Uniform | 4 of 4 | 40.3 s | 50.6 s | 58.3, 42.4, 9.9, 50.6 |
+| Jev-weighted | 4 of 4 | 33.8 s | 42.2 s | 17.9, 59.4, 42.2, 15.6 |
+
+A small edge for the weights with a spread wide enough that four runs cannot
+separate the two. This bug needs a longer sequence than the ES5 one: add a
+todo, complete it, switch filter, clear completed, then two seconds with no
+filter change. Raising one button's weight by about 1.4x barely changes how
+often that sequence occurs. Steering by control is the wrong grain for a
+sequence-shaped bug; a policy over paths would be the next step, and the
+trace graph already has the data for it.
