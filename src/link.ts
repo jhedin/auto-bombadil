@@ -20,7 +20,7 @@ export type CodeSlice = {
   link: { target: string; exists: boolean } | null;
 };
 
-const WHOLE_FILE_LIMIT = 6_000;
+const WHOLE_FILE_LIMIT = 12_000;
 const EXCERPT_LIMIT = 9_000;
 const WINDOW = 20;
 
@@ -74,15 +74,43 @@ function tokensFor(f: ControlInfo): string[] {
   return [...tokens].filter((t) => t.length >= 3);
 }
 
+const STOP = new Set(["function", "return", "this", "self", "bind", "call", "apply", "prototype", "window", "document", "event", "target", "true", "false", "null", "undefined", "const", "var", "let", "click", "change", "keyup", "keydown", "keypress", "input", "submit", "blur", "focus", "addEventListener", "querySelector", "getElementById", "length", "value", "checked"]);
+
+/** Identifiers on a line that look like handlers or helpers it hands off to. */
+function referencedNames(line: string): string[] {
+  const out = new Set<string>();
+  for (const m of line.matchAll(/(?:this|self|app|[A-Za-z_$][\w$]*)\.([A-Za-z_$][\w$]{3,})\b/g)) out.add(m[1]!);
+  for (const m of line.matchAll(/\b([A-Za-z_$][\w$]{3,})\s*(?:\.bind\b|\(|,|\))/g)) out.add(m[1]!);
+  return [...out].filter((n) => !STOP.has(n));
+}
+
+/** Lines that define a function by that name, in the common JS shapes. */
+function definesName(line: string, name: string): boolean {
+  const n = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?:function\\s+${n}\\s*\\(|\\b${n}\\s*[:=]\\s*(?:async\\s*)?(?:function\\b|\\([^)]*\\)\\s*=>)|\\.${n}\\s*=\\s*(?:async\\s*)?function\\b|^\\s*(?:async\\s+)?${n}\\s*\\([^)]*\\)\\s*\\{)`).test(line);
+}
+
 function excerpt(source: string, tokens: string[]): string | null {
   if (source.length <= WHOLE_FILE_LIMIT) return source;
   const lines = source.split("\n");
   const hits = new Set<number>();
+  const mark = (i: number) => {
+    for (let k = Math.max(0, i - WINDOW); k <= Math.min(lines.length - 1, i + WINDOW); k++) hits.add(k);
+  };
+  const matched: number[] = [];
   lines.forEach((line, i) => {
     if (tokens.some((t) => line.includes(t))) {
-      for (let k = Math.max(0, i - WINDOW); k <= Math.min(lines.length - 1, i + WINDOW); k++) hits.add(k);
+      mark(i);
+      matched.push(i);
     }
   });
+  // One hop: functions the matched lines hand off to, defined elsewhere in the file.
+  const names = new Set(matched.flatMap((i) => referencedNames(lines[i]!)));
+  if (names.size > 0) {
+    lines.forEach((line, i) => {
+      if (!hits.has(i) && [...names].some((n) => definesName(line, n))) mark(i);
+    });
+  }
   if (hits.size === 0) return null;
   const sorted = [...hits].sort((a, b) => a - b);
   const out: string[] = [];
@@ -95,6 +123,11 @@ function excerpt(source: string, tokens: string[]): string | null {
   return out.join("\n").slice(0, EXCERPT_LIMIT);
 }
 
+/** Vendored or minified libraries are not the app's code. */
+function isVendored(src: string): boolean {
+  return /\.min\.js$/i.test(src) || /(^|\/)(node_modules|vendor|lib|libs)\//i.test(src);
+}
+
 async function scriptsOf(root: string, page: string, html: string): Promise<{ file: string; source: string }[]> {
   const out: { file: string; source: string }[] = [];
   const pageDir = dirname(page);
@@ -102,6 +135,7 @@ async function scriptsOf(root: string, page: string, html: string): Promise<{ fi
     const src = /\bsrc=["']([^"']+)["']/i.exec(m[1]!)?.[1];
     if (src) {
       if (/^[a-z]+:/i.test(src)) continue;
+      if (isVendored(src)) continue;
       const target = posix.normalize(posix.join(pageDir, src));
       try {
         out.push({ file: target, source: await readFile(fileFor(root, target), "utf8") });

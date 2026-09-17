@@ -18,6 +18,7 @@ export type Judgment = {
   handlerBoundToControl: number;
   updatesCorrectElements: number;
   updatesAllDependentViews: number;
+  keepsRouteInSync: number;
   unguardedState: number;
   needsRepetition: number;
   severity: number;
@@ -94,6 +95,19 @@ export function questionsFor() {
       {
         true: "All dependent parts are refreshed",
         false: "At least one dependent part is left stale",
+      },
+    ),
+    keeps_route_in_sync: noul(
+      {
+        question:
+          "If the handler for `control` changes which view, filter, page, or subset of data is displayed, does it also update the URL, hash, or router state to match?",
+        inspect,
+        focus:
+          "State that lives both in memory and in the URL must change together. A handler that changes neither counts as in sync.",
+      },
+      {
+        true: "The displayed view and the route change together, or the handler changes neither",
+        false: "The handler changes the displayed view or filter but leaves the URL or router state as it was, or the other way round",
       },
     ),
     unguarded_state: noul(
@@ -189,6 +203,7 @@ export class Judge {
       handlerBoundToControl: answers.handler_bound_to_control.noul,
       updatesCorrectElements: answers.updates_correct_elements.noul,
       updatesAllDependentViews: answers.updates_all_dependent_views.noul,
+      keepsRouteInSync: answers.keeps_route_in_sync.noul,
       unguardedState: answers.unguarded_state.noul,
       needsRepetition: answers.needs_repetition.noul,
       severity: answers.failure_severity.score,

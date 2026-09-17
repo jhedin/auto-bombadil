@@ -1,4 +1,4 @@
-/** Baseline TodoMVC specification: same properties, equal click weights. */
+/** Baseline jQuery TodoMVC specification, sharing the TodoMVC invariants. */
 import { weighted } from "@antithesishq/bombadil/browser";
 import { navigation, scroll, waitOnce } from "@antithesishq/bombadil/browser/defaults/actions";
 import { fastInputs } from "./todomvc-actions.ts";

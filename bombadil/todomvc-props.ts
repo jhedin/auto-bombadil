@@ -3,7 +3,7 @@
  * Each property reads one extracted snapshot of the app and states a rule
  * that must hold in every state.
  */
-import { always } from "@antithesishq/bombadil";
+import { always, eventually, now } from "@antithesishq/bombadil";
 import { extract } from "@antithesishq/bombadil/browser";
 
 type Filter = "all" | "active" | "completed";
@@ -12,7 +12,12 @@ type Item = { completed: boolean; editing: boolean; title: string };
 
 export type TodoSnapshot = {
   items: Item[];
+  /** The filter the app claims to show: its selected filter link, else the route. */
   filter: Filter;
+  /** The filter the URL asks for, or null when the URL has no route. */
+  routeFilter: Filter | null;
+  /** Whether a filter link is marked selected at all. */
+  hasSelectedFilter: boolean;
   countText: string;
   count: number | null;
   toggleAllChecked: boolean | null;
@@ -35,8 +40,13 @@ const todo = extract((state): TodoSnapshot => {
     editing: li.classList.contains("editing"),
     title: li.querySelector("label")?.textContent ?? "",
   }));
+  const filterOf = (route: string): Filter =>
+    route.includes("completed") ? "completed" : route.includes("active") ? "active" : "all";
   const hash = state.window.location.hash;
-  const filter: Filter = hash.includes("completed") ? "completed" : hash.includes("active") ? "active" : "all";
+  const routeFilter: Filter | null = hash.length > 1 ? filterOf(hash) : null;
+  const selected = d.querySelector<HTMLAnchorElement>(".filters .selected");
+  const hasSelectedFilter = selected !== null;
+  const filter: Filter = selected ? filterOf(selected.getAttribute("href") ?? "") : (routeFilter ?? "all");
   const countText = d.querySelector(".todo-count")?.textContent?.trim() ?? "";
   const countNumber = parseInt(countText, 10);
   const toggleAll = d.querySelector<HTMLInputElement>(".toggle-all");
@@ -45,6 +55,8 @@ const todo = extract((state): TodoSnapshot => {
   return {
     items,
     filter,
+    routeFilter,
+    hasSelectedFilter,
     countText,
     count: Number.isNaN(countNumber) ? null : countNumber,
     toggleAllChecked: toggleAll?.checked ?? null,
@@ -110,4 +122,21 @@ export const chromeHiddenWhenEmpty = always(() => {
 /** Item titles are never blank once rendered. */
 export const noBlankTitles = always(() =>
   snap().items.every((i) => i.editing || i.title.trim() !== ""),
+);
+
+/**
+ * The selected filter link agrees with the route. Routing may be asynchronous,
+ * so a mismatch must resolve within two seconds; one that persists means the
+ * app changed its filter without updating the URL, or the other way round.
+ */
+export const selectedFilterMatchesRoute = always(
+  now(() => {
+    const t = snap();
+    return t.hasSelectedFilter && t.routeFilter !== null && t.filter !== t.routeFilter;
+  }).implies(
+    eventually(() => {
+      const t = snap();
+      return !t.hasSelectedFilter || t.routeFilter === null || t.filter === t.routeFilter;
+    }).within(2, "seconds"),
+  ),
 );

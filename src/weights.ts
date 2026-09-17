@@ -44,6 +44,7 @@ export function controlRisk(j: Judgment): { risk: number; reasons: string[] } {
     1 - j.handlerBoundToControl,
     1 - j.updatesCorrectElements,
     1 - j.updatesAllDependentViews,
+    1 - j.keepsRouteInSync,
   );
   const severity = j.severity / 2;
   const risk = clamp01(0.35 * crash + 0.35 * inconsistency + 0.1 * j.unguardedState + 0.2 * severity);
@@ -52,6 +53,7 @@ export function controlRisk(j: Judgment): { risk: number; reasons: string[] } {
   if (j.handlerBoundToControl < 0.5) reasons.push(`no direct handler ${(1 - j.handlerBoundToControl).toFixed(2)}`);
   if (j.updatesCorrectElements < 0.5) reasons.push(`wrong update target ${(1 - j.updatesCorrectElements).toFixed(2)}`);
   if (j.updatesAllDependentViews < 0.5) reasons.push(`stale dependent view ${(1 - j.updatesAllDependentViews).toFixed(2)}`);
+  if (j.keepsRouteInSync < 0.5) reasons.push(`route out of sync ${(1 - j.keepsRouteInSync).toFixed(2)}`);
   if (j.unguardedState >= 0.5) reasons.push(`unguarded state ${j.unguardedState.toFixed(2)}`);
   if (j.needsRepetition >= 0.5) reasons.push(`needs repetition ${j.needsRepetition.toFixed(2)}`);
   reasons.push(`severity ${j.severity.toFixed(2)} (conf ${j.severityConfidence.toFixed(2)})`);

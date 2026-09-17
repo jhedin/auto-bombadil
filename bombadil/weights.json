@@ -1,38 +1,38 @@
 {
-  "generatedAt": "2026-09-17T02:06:38.375Z",
+  "generatedAt": "2026-09-17T04:00:14.796Z",
   "floor": 100,
   "scale": 1000,
   "weights": {
     "/index.html|a||||unhandled-promise-rejection/index.html|Unhandled promise rejection|||": {
-      "weight": 1010,
-      "risk": 0.9095,
+      "weight": 1018,
+      "risk": 0.9179999999999999,
       "page": "/index.html",
       "control": "a Unhandled promise rejection",
       "reasons": [
-        "destination /unhandled-promise-rejection/index.html risk 0.91"
+        "destination /unhandled-promise-rejection/index.html risk 0.92"
       ]
     },
     "/index.html|a||||uncaught-exception/index.html|Uncaught exception|||": {
-      "weight": 1008,
-      "risk": 0.9075,
+      "weight": 1022,
+      "risk": 0.9224999999999999,
       "page": "/index.html",
       "control": "a Uncaught exception",
       "reasons": [
-        "destination /uncaught-exception/index.html risk 0.91"
+        "destination /uncaught-exception/index.html risk 0.92"
       ]
     },
     "/index.html|a||||console-error/index.html|Console error|||": {
-      "weight": 710,
-      "risk": 0.6103,
+      "weight": 704,
+      "risk": 0.6038,
       "page": "/index.html",
       "control": "a Console error",
       "reasons": [
-        "destination /console-error/index.html risk 0.61"
+        "destination /console-error/index.html risk 0.60"
       ]
     },
     "/index.html|a||||links/a.html|Links|||": {
-      "weight": 327,
-      "risk": 0.227375,
+      "weight": 331,
+      "risk": 0.23062499999999997,
       "page": "/index.html",
       "control": "a Links",
       "reasons": [
@@ -40,8 +40,8 @@
       ]
     },
     "/index.html|a||||back-forward/index.html|Back and forward|||": {
-      "weight": 327,
-      "risk": 0.227375,
+      "weight": 331,
+      "risk": 0.23062499999999997,
       "page": "/index.html",
       "control": "a Back and forward",
       "reasons": [
@@ -49,256 +49,263 @@
       ]
     },
     "/index.html|a||||mutation/index.html|Mutation list|||": {
-      "weight": 595,
-      "risk": 0.49549999999999994,
+      "weight": 575,
+      "risk": 0.475,
       "page": "/index.html",
       "control": "a Mutation list",
       "reasons": [
-        "destination /mutation/index.html risk 0.50"
+        "destination /mutation/index.html risk 0.47"
       ]
     },
     "/index.html|a||||random-text-input/index.html|Random text input|||": {
-      "weight": 503,
-      "risk": 0.403,
+      "weight": 517,
+      "risk": 0.41700000000000004,
       "page": "/index.html",
       "control": "a Random text input",
       "reasons": [
-        "destination /random-text-input/index.html risk 0.40"
+        "destination /random-text-input/index.html risk 0.42"
       ]
     },
     "/index.html|a||||double-click/index.html|Double click counter|||": {
-      "weight": 616,
-      "risk": 0.5155,
+      "weight": 588,
+      "risk": 0.48750000000000004,
       "page": "/index.html",
       "control": "a Double click counter",
       "reasons": [
-        "destination /double-click/index.html risk 0.52"
+        "destination /double-click/index.html risk 0.49"
       ]
     },
     "/index.html|a||||wait-action/index.html|Wait action counter|||": {
-      "weight": 567,
-      "risk": 0.46699999999999997,
+      "weight": 537,
+      "risk": 0.437,
       "page": "/index.html",
       "control": "a Wait action counter",
       "reasons": [
-        "destination /wait-action/index.html risk 0.47"
+        "destination /wait-action/index.html risk 0.44"
       ]
     },
     "/index.html|a||||counter-state-machine/index.html|Counter state machine|||": {
-      "weight": 516,
-      "risk": 0.4164999999999999,
+      "weight": 547,
+      "risk": 0.4469999999999999,
       "page": "/index.html",
       "control": "a Counter state machine",
       "reasons": [
-        "destination /counter-state-machine/index.html risk 0.42"
+        "destination /counter-state-machine/index.html risk 0.45"
       ]
     },
     "/random-text-input/index.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/random-text-input/index.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/random-text-input/index.html|input||text-input||||Type something here...|text|": {
-      "weight": 503,
-      "risk": 0.403,
+      "weight": 517,
+      "risk": 0.41700000000000004,
       "page": "/random-text-input/index.html",
       "control": "input#text-input Type something here...",
       "reasons": [
+        "stale dependent view 0.54",
         "unguarded state 0.81",
         "severity 0.70 (conf 0.00)"
       ],
       "judgment": {
         "throwsOrRejects": 0.22,
         "logsConsoleError": 0.05,
-        "handlerBoundToControl": 0.92,
+        "handlerBoundToControl": 0.94,
         "updatesCorrectElements": 0.86,
-        "updatesAllDependentViews": 0.5,
+        "updatesAllDependentViews": 0.46,
+        "keepsRouteInSync": 0.85,
         "unguardedState": 0.81,
-        "needsRepetition": 0.13,
+        "needsRepetition": 0.14,
         "severity": 0.7,
         "severityConfidence": 0,
         "model": "jev-1.13.0",
-        "inputTokens": 1438
+        "inputTokens": 1593
       }
     },
     "/uncaught-exception/index.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/uncaught-exception/index.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/uncaught-exception/index.html|button||a|||A|||": {
-      "weight": 1008,
-      "risk": 0.9075,
+      "weight": 1022,
+      "risk": 0.9224999999999999,
       "page": "/uncaught-exception/index.html",
       "control": "button#a A",
       "reasons": [
-        "throws/rejects 0.97",
+        "throws/rejects 0.98",
         "console.error 0.63",
-        "stale dependent view 0.86",
-        "unguarded state 0.67",
+        "stale dependent view 0.89",
+        "unguarded state 0.68",
         "needs repetition 0.96",
         "severity 2.00 (conf 1.00)"
       ],
       "judgment": {
-        "throwsOrRejects": 0.97,
+        "throwsOrRejects": 0.98,
         "logsConsoleError": 0.63,
-        "handlerBoundToControl": 0.97,
+        "handlerBoundToControl": 0.96,
         "updatesCorrectElements": 0.92,
-        "updatesAllDependentViews": 0.14,
-        "unguardedState": 0.67,
+        "updatesAllDependentViews": 0.11,
+        "keepsRouteInSync": 0.85,
+        "unguardedState": 0.68,
         "needsRepetition": 0.96,
         "severity": 2,
         "severityConfidence": 1,
         "model": "jev-1.13.0",
-        "inputTokens": 1434
+        "inputTokens": 1589
       }
     },
     "/unhandled-promise-rejection/index.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/unhandled-promise-rejection/index.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/unhandled-promise-rejection/index.html|button||a|||A|||": {
-      "weight": 1010,
-      "risk": 0.9095,
+      "weight": 1018,
+      "risk": 0.9179999999999999,
       "page": "/unhandled-promise-rejection/index.html",
       "control": "button#a A",
       "reasons": [
-        "throws/rejects 0.95",
-        "console.error 0.81",
+        "throws/rejects 0.96",
+        "console.error 0.83",
         "stale dependent view 0.90",
-        "unguarded state 0.68",
-        "needs repetition 0.91",
-        "severity 1.94 (conf 0.92)"
+        "unguarded state 0.71",
+        "needs repetition 0.89",
+        "severity 1.96 (conf 0.94)"
       ],
       "judgment": {
-        "throwsOrRejects": 0.95,
-        "logsConsoleError": 0.81,
-        "handlerBoundToControl": 0.9,
-        "updatesCorrectElements": 0.91,
+        "throwsOrRejects": 0.96,
+        "logsConsoleError": 0.83,
+        "handlerBoundToControl": 0.88,
+        "updatesCorrectElements": 0.9,
         "updatesAllDependentViews": 0.1,
-        "unguardedState": 0.68,
-        "needsRepetition": 0.91,
-        "severity": 1.94,
-        "severityConfidence": 0.92,
+        "keepsRouteInSync": 0.85,
+        "unguardedState": 0.71,
+        "needsRepetition": 0.89,
+        "severity": 1.96,
+        "severityConfidence": 0.94,
         "model": "jev-1.13.0",
-        "inputTokens": 1457
+        "inputTokens": 1612
       }
     },
     "/counter-state-machine/index.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/counter-state-machine/index.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/counter-state-machine/index.html|button||increment|||+|||": {
-      "weight": 516,
-      "risk": 0.4164999999999999,
+      "weight": 547,
+      "risk": 0.4469999999999999,
       "page": "/counter-state-machine/index.html",
       "control": "button#increment +",
       "reasons": [
-        "stale dependent view 0.65",
+        "stale dependent view 0.68",
         "unguarded state 0.95",
-        "severity 0.45 (conf 0.33)"
+        "severity 0.51 (conf 0.24)"
       ],
       "judgment": {
-        "throwsOrRejects": 0.14,
+        "throwsOrRejects": 0.18,
         "logsConsoleError": 0.04,
         "handlerBoundToControl": 0.97,
-        "updatesCorrectElements": 0.87,
-        "updatesAllDependentViews": 0.35,
+        "updatesCorrectElements": 0.84,
+        "updatesAllDependentViews": 0.32,
+        "keepsRouteInSync": 0.84,
         "unguardedState": 0.95,
-        "needsRepetition": 0.11,
-        "severity": 0.45,
-        "severityConfidence": 0.33,
+        "needsRepetition": 0.12,
+        "severity": 0.51,
+        "severityConfidence": 0.24,
         "model": "jev-1.13.0",
-        "inputTokens": 1498
+        "inputTokens": 1653
       }
     },
     "/counter-state-machine/index.html|button||decrement|||-|||": {
-      "weight": 471,
-      "risk": 0.371,
+      "weight": 488,
+      "risk": 0.388,
       "page": "/counter-state-machine/index.html",
       "control": "button#decrement -",
       "reasons": [
-        "stale dependent view 0.60",
+        "stale dependent view 0.62",
         "unguarded state 0.96",
-        "severity 0.30 (conf 0.55)"
+        "severity 0.33 (conf 0.51)"
       ],
       "judgment": {
-        "throwsOrRejects": 0.1,
+        "throwsOrRejects": 0.12,
         "logsConsoleError": 0.04,
         "handlerBoundToControl": 0.97,
-        "updatesCorrectElements": 0.89,
-        "updatesAllDependentViews": 0.4,
+        "updatesCorrectElements": 0.88,
+        "updatesAllDependentViews": 0.38,
+        "keepsRouteInSync": 0.85,
         "unguardedState": 0.96,
-        "needsRepetition": 0.11,
-        "severity": 0.3,
-        "severityConfidence": 0.55,
+        "needsRepetition": 0.12,
+        "severity": 0.33,
+        "severityConfidence": 0.51,
         "model": "jev-1.13.0",
-        "inputTokens": 1502
+        "inputTokens": 1657
       }
     },
     "/mutation/index.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/mutation/index.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/mutation/index.html|button|||||Hit it|||": {
-      "weight": 595,
-      "risk": 0.49549999999999994,
+      "weight": 575,
+      "risk": 0.475,
       "page": "/mutation/index.html",
       "control": "button Hit it",
       "reasons": [
-        "stale dependent view 0.79",
+        "stale dependent view 0.76",
         "unguarded state 0.86",
-        "severity 0.98 (conf 0.34)"
+        "severity 0.88 (conf 0.35)"
       ],
       "judgment": {
         "throwsOrRejects": 0.1,
         "logsConsoleError": 0.04,
         "handlerBoundToControl": 0.97,
-        "updatesCorrectElements": 0.65,
-        "updatesAllDependentViews": 0.21,
+        "updatesCorrectElements": 0.67,
+        "updatesAllDependentViews": 0.24,
+        "keepsRouteInSync": 0.69,
         "unguardedState": 0.86,
-        "needsRepetition": 0.22,
-        "severity": 0.98,
-        "severityConfidence": 0.34,
+        "needsRepetition": 0.21,
+        "severity": 0.88,
+        "severityConfidence": 0.35,
         "model": "jev-1.13.0",
-        "inputTokens": 1546
+        "inputTokens": 1701
       }
     },
     "/links/a.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/links/a.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/back-forward/index.html|a||||other.html|Other|||": {
-      "weight": 327,
-      "risk": 0.227375,
+      "weight": 331,
+      "risk": 0.23062499999999997,
       "page": "/back-forward/index.html",
       "control": "a Other",
       "reasons": [
@@ -306,125 +313,198 @@
       ]
     },
     "/back-forward/index.html|a||||../index.html|Home|||": {
-      "weight": 705,
-      "risk": 0.60475,
+      "weight": 711,
+      "risk": 0.61125,
       "page": "/back-forward/index.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45",
+        "destination /index.html risk 0.46",
         "never taken: +0.15 novelty"
       ]
     },
     "/back-forward/other.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/back-forward/other.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/wait-action/index.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/wait-action/index.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/wait-action/index.html|button||increment|||+|||": {
-      "weight": 567,
-      "risk": 0.46699999999999997,
+      "weight": 537,
+      "risk": 0.437,
       "page": "/wait-action/index.html",
       "control": "button#increment +",
       "reasons": [
-        "stale dependent view 0.70",
+        "stale dependent view 0.60",
         "unguarded state 0.93",
-        "severity 0.59 (conf 0.12)"
+        "severity 0.64 (conf 0.05)"
       ],
       "judgment": {
         "throwsOrRejects": 0.2,
-        "logsConsoleError": 0.05,
+        "logsConsoleError": 0.04,
         "handlerBoundToControl": 0.97,
         "updatesCorrectElements": 0.85,
-        "updatesAllDependentViews": 0.3,
+        "updatesAllDependentViews": 0.4,
+        "keepsRouteInSync": 0.84,
         "unguardedState": 0.93,
         "needsRepetition": 0.11,
-        "severity": 0.59,
-        "severityConfidence": 0.12,
+        "severity": 0.64,
+        "severityConfidence": 0.05,
         "model": "jev-1.13.0",
-        "inputTokens": 1425
+        "inputTokens": 1580
       }
     },
     "/console-error/index.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/console-error/index.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/console-error/index.html|button||a|||A|||": {
-      "weight": 710,
-      "risk": 0.6103,
+      "weight": 704,
+      "risk": 0.6038,
       "page": "/console-error/index.html",
       "control": "button#a A",
       "reasons": [
         "console.error 0.98",
-        "stale dependent view 0.79",
-        "unguarded state 0.73",
-        "needs repetition 0.69",
-        "severity 0.55 (conf 0.18)"
+        "stale dependent view 0.80",
+        "unguarded state 0.72",
+        "needs repetition 0.70",
+        "severity 0.46 (conf 0.31)"
       ],
       "judgment": {
-        "throwsOrRejects": 0.05,
+        "throwsOrRejects": 0.06,
         "logsConsoleError": 0.98,
-        "handlerBoundToControl": 0.95,
+        "handlerBoundToControl": 0.96,
         "updatesCorrectElements": 0.9,
-        "updatesAllDependentViews": 0.21,
-        "unguardedState": 0.73,
-        "needsRepetition": 0.69,
-        "severity": 0.55,
-        "severityConfidence": 0.18,
+        "updatesAllDependentViews": 0.2,
+        "keepsRouteInSync": 0.88,
+        "unguardedState": 0.72,
+        "needsRepetition": 0.7,
+        "severity": 0.46,
+        "severityConfidence": 0.31,
         "model": "jev-1.13.0",
-        "inputTokens": 1425
+        "inputTokens": 1580
       }
     },
     "/double-click/index.html|a||||../index.html|Home|||": {
-      "weight": 555,
-      "risk": 0.45475,
+      "weight": 561,
+      "risk": 0.46124999999999994,
       "page": "/double-click/index.html",
       "control": "a Home",
       "reasons": [
-        "destination /index.html risk 0.45"
+        "destination /index.html risk 0.46"
       ]
     },
     "/double-click/index.html|button||double-click-target|||Double Click Me|||": {
-      "weight": 616,
-      "risk": 0.5155,
+      "weight": 588,
+      "risk": 0.48750000000000004,
       "page": "/double-click/index.html",
       "control": "button#double-click-target Double Click Me",
       "reasons": [
-        "no direct handler 0.61",
-        "stale dependent view 0.58",
+        "no direct handler 0.58",
+        "stale dependent view 0.61",
         "unguarded state 0.89",
-        "severity 0.73 (conf 0.00)"
+        "severity 0.66 (conf 0.01)"
       ],
       "judgment": {
-        "throwsOrRejects": 0.4,
+        "throwsOrRejects": 0.34,
         "logsConsoleError": 0.05,
-        "handlerBoundToControl": 0.39,
-        "updatesCorrectElements": 0.71,
-        "updatesAllDependentViews": 0.42,
+        "handlerBoundToControl": 0.42,
+        "updatesCorrectElements": 0.67,
+        "updatesAllDependentViews": 0.39,
+        "keepsRouteInSync": 0.83,
         "unguardedState": 0.89,
         "needsRepetition": 0.2,
-        "severity": 0.73,
-        "severityConfidence": 0,
+        "severity": 0.66,
+        "severityConfidence": 0.01,
         "model": "jev-1.13.0",
-        "inputTokens": 1458
+        "inputTokens": 1613
       }
+    },
+    "/links/a.html|a||||b.html|B|||": {
+      "weight": 365,
+      "risk": 0.26531249999999995,
+      "page": "/links/a.html",
+      "control": "a B",
+      "reasons": [
+        "destination /links/b.html risk 0.12",
+        "never taken: +0.15 novelty"
+      ]
+    },
+    "/links/a.html|a||||c.html|C|||": {
+      "weight": 365,
+      "risk": 0.26531249999999995,
+      "page": "/links/a.html",
+      "control": "a C",
+      "reasons": [
+        "destination /links/c.html risk 0.12",
+        "never taken: +0.15 novelty"
+      ]
+    },
+    "/links/b.html|a||||a.html|A|||": {
+      "weight": 481,
+      "risk": 0.380625,
+      "page": "/links/b.html",
+      "control": "a A",
+      "reasons": [
+        "destination /links/a.html risk 0.23",
+        "never taken: +0.15 novelty"
+      ]
+    },
+    "/links/b.html|a||||c.html|C|||": {
+      "weight": 365,
+      "risk": 0.26531249999999995,
+      "page": "/links/b.html",
+      "control": "a C",
+      "reasons": [
+        "destination /links/c.html risk 0.12",
+        "never taken: +0.15 novelty"
+      ]
+    },
+    "/links/c.html|a||||a.html|A|||": {
+      "weight": 481,
+      "risk": 0.380625,
+      "page": "/links/c.html",
+      "control": "a A",
+      "reasons": [
+        "destination /links/a.html risk 0.23",
+        "never taken: +0.15 novelty"
+      ]
+    },
+    "/links/c.html|a||||b.html|B|||": {
+      "weight": 365,
+      "risk": 0.26531249999999995,
+      "page": "/links/c.html",
+      "control": "a B",
+      "reasons": [
+        "destination /links/b.html risk 0.12",
+        "never taken: +0.15 novelty"
+      ]
+    },
+    "/links/c.html|a||||d.html|D (broken link)|||": {
+      "weight": 1100,
+      "risk": 1,
+      "page": "/links/c.html",
+      "control": "a D (broken link)",
+      "reasons": [
+        "link target /links/d.html does not exist (checked in code)",
+        "never taken: +0.15 novelty"
+      ]
     }
   }
 }

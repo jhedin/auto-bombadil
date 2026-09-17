@@ -35,6 +35,13 @@ const APPS: Record<string, App> = {
     uniform: "todomvc-uniform",
     trace: ".auto-bombadil/todomvc/uniform-0/trace.jsonl",
   },
+  "todomvc-jquery": {
+    root: "examples/todomvc-jquery",
+    weights: "bombadil/todomvc-jquery-weights.json",
+    spec: "todomvc-jquery",
+    uniform: "todomvc-jquery-uniform",
+    trace: ".auto-bombadil/todomvc-jquery/uniform-0/trace.jsonl",
+  },
 };
 
 function appFrom(args: string[]): { app: App; name: string; rest: string[] } {
@@ -142,7 +149,7 @@ async function main(): Promise<void> {
       return;
     }
     default:
-      console.error("usage: node src/cli.ts <serve|run|graph|weights|compare> [--app example|todomvc] [args]");
+      console.error("usage: node src/cli.ts <serve|run|graph|weights|compare> [--app example|todomvc|todomvc-jquery] [args]");
       process.exit(1);
   }
 }

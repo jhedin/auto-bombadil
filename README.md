@@ -9,7 +9,7 @@ those weights.
 
 Bombadil's specification runtime has no network access, so this is a batch
 loop rather than a live one. Every command takes `--app example` (default)
-or `--app todomvc`.
+`--app todomvc`, or `--app todomvc-jquery`.
 
 The short path needs no exploratory run first:
 
@@ -52,12 +52,36 @@ invariants: filters show the right items, "N items left" matches, the count
 pluralizes, "Clear completed" appears exactly when needed, the toggle-all box
 reflects the items, the chrome hides when empty, titles are never blank.
 
-The toggle-all invariant fails on the unmodified app. The view's `toggleAll`
+**todomvc-jquery** (`examples/todomvc-jquery`): the jQuery TodoMVC from
+tastejs/todomvc, dist build with its vendored jQuery, Handlebars, and
+Director, unmodified. Same invariants as above.
+
+Both TodoMVC specs use `bombadil/todomvc-actions.ts` instead of Bombadil's
+default input generator: short random strings and frequent Enter, which
+raises Bombadil from about 1 to about 10 states per second on these apps.
+
+The toggle-all invariant fails on the unmodified ES5 app. The view's `toggleAll`
 render command assigns `checked` to the label element instead of the checkbox
 input, and the click handler is bound to the label only, so clicking the
 checkbox itself changes nothing in the model. Jev, reading the source with no
 hint about the bug, gives that control "no direct handler 0.83" and "wrong
-update target 0.58", the two facts behind the failure.
+update target 0.58", the two facts behind the failure. In the jQuery app the
+same control is properly bound through a delegated change handler, and Jev
+ranks it last there.
+
+The jQuery app fails a different invariant, `selectedFilterMatchesRoute`:
+its "Clear completed" handler sets the in-memory filter to `all` and
+re-renders, but leaves the URL at `#/completed` or `#/active`. The view then
+shows All while the route says otherwise, and a reload would flip it back.
+Jev's first pass did not flag that button, for two reasons worth recording.
+None of the questions asked about state kept in two places, so a route-sync
+question was added (on this app it is a fit, not a prediction; it is a
+prediction for the next app). And the code slice held the line that binds
+the handler but not the handler body, because `destroyCompleted` is defined
+elsewhere in the file. The linker now follows one hop from a matched line to
+the functions it hands off to, and sends files under 12k characters whole.
+With the handler visible, Jev scores the button 0.27 on route-sync, the
+lowest of any control in the app.
 
 ## What Jev is asked
 
@@ -67,9 +91,16 @@ markup and the script excerpts that mention it (`src/judge.ts`):
 - crash-type: can it throw or reject unhandled; can it log a console error
 - consistency-type: does a handler run for direct interaction with this
   element; does each DOM update target the right element; is every dependent
-  view refreshed after the model changes
+  view refreshed after the model changes; does a change of displayed view or
+  filter also update the route
 - unguarded state changes; whether failure needs repeated interaction
 - a severity Score with three levels
+
+The linker (`src/link.ts`) sends a script whole when it is under 12k
+characters. Larger files are cut to windows around lines that mention the
+control's id, classes (with camelCase variants), placeholder, text, or
+route, plus one hop to the functions those lines reference. Minified and
+vendored scripts are skipped.
 
 `src/weights.ts` combines them: crash and inconsistency each carry 35%,
 severity 20%, unguarded state 10%. Links inherit half of their destination's
@@ -85,7 +116,9 @@ a floor so exploration continues.
 | `bombadil/specification.ts` | Weighted spec for the example site (imports `weights.json`) |
 | `bombadil/uniform.ts` | Baseline spec for the example site with equal weights |
 | `bombadil/todomvc-props.ts` | TodoMVC invariants |
-| `bombadil/todomvc.ts`, `todomvc-uniform.ts` | Weighted and baseline TodoMVC specs |
+| `bombadil/todomvc-actions.ts` | Fast input generator for form-driven apps |
+| `bombadil/todomvc.ts`, `todomvc-uniform.ts` | Weighted and baseline ES5 TodoMVC specs |
+| `bombadil/todomvc-jquery.ts`, `todomvc-jquery-uniform.ts` | Weighted and baseline jQuery TodoMVC specs |
 | `src/trace.ts` | Trace to graph |
 | `src/link.ts` | Control to code slice, plus deterministic checks (missing link targets) |
 | `src/judge.ts` | Jev questions and the judgment cache |
@@ -93,6 +126,7 @@ a floor so exploration continues.
 | `src/cli.ts` | `serve`, `run`, `graph`, `weights`, `compare` |
 | `examples/site` | Example pages from Bombadil's integration tests (MIT) |
 | `examples/todomvc` | Reference TodoMVC, vanilla ES5 (MIT) |
+| `examples/todomvc-jquery` | Reference TodoMVC, jQuery (MIT) |
 
 ## First measurement
 

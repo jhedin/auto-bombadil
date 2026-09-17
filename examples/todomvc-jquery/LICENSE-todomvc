@@ -1,0 +1,5 @@
+MIT License
+
+Copyright (c) Addy Osmani, Sindre Sorhus, Pascal Hartig, Stephen Sawchuk
+
+The files under this directory are copied from tastejs/todomvc (examples/jquery, dist build) together with its vendored dependencies jQuery, Handlebars, and Director, each under its own MIT license.
