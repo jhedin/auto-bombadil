@@ -48,5 +48,9 @@ See README.md for the full loop. Key points for changes:
   JS engine, no Node APIs, no network) and the Node tooling. Keep it plain.
 - Judgments are cached in `.auto-bombadil/judgments.json` by code hash.
   Changing a question in `src/judge.ts` needs a cache clear to take effect.
+- A top-level spec may export only properties and action generators. Keep
+  extractor cells unexported (or in a helper module not re-exported with
+  `export *`), and call `.named("x")` on cells the tooling reads from the
+  trace, since the bundler does not always name them.
 - Run `npm run typecheck` before committing. Node runs the `.ts` sources
   directly via type stripping, so avoid enums and parameter properties.

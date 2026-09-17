@@ -1,0 +1,7 @@
+Everything in this repo is MIT License unless otherwise specified.
+
+Copyright (c) Addy Osmani, Sindre Sorhus, Pascal Hartig, Stephen Sawchuk.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+
+The files under this directory are copied from tastejs/todomvc (examples/javascript-es5) and todomvc-app-css / todomvc-common, under the MIT license.

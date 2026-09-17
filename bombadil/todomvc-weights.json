@@ -1,0 +1,269 @@
+{
+  "generatedAt": "2026-09-17T02:06:37.712Z",
+  "floor": 100,
+  "scale": 1000,
+  "weights": {
+    "/index.html|input||||||What needs to be done?||input.new-todo": {
+      "weight": 515,
+      "risk": 0.41500000000000004,
+      "page": "/index.html",
+      "control": "input.new-todo What needs to be done?",
+      "reasons": [
+        "stale dependent view 0.57",
+        "severity 1.13 (conf 0.00)"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.21,
+        "logsConsoleError": 0.07,
+        "handlerBoundToControl": 0.77,
+        "updatesCorrectElements": 0.65,
+        "updatesAllDependentViews": 0.43,
+        "unguardedState": 0.29,
+        "needsRepetition": 0.14,
+        "severity": 1.13,
+        "severityConfidence": 0,
+        "model": "jev-1.13.0",
+        "inputTokens": 6481
+      }
+    },
+    "/index.html|a||||#/completed|Completed|||": {
+      "weight": 536,
+      "risk": 0.436,
+      "page": "/index.html",
+      "control": "a Completed",
+      "reasons": [
+        "no direct handler 0.64",
+        "stale dependent view 0.55",
+        "severity 1.17 (conf 0.00)"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.2,
+        "logsConsoleError": 0.07,
+        "handlerBoundToControl": 0.36,
+        "updatesCorrectElements": 0.57,
+        "updatesAllDependentViews": 0.45,
+        "unguardedState": 0.25,
+        "needsRepetition": 0.14,
+        "severity": 1.17,
+        "severityConfidence": 0,
+        "model": "jev-1.13.0",
+        "inputTokens": 7970
+      }
+    },
+    "/index.html|a||||#/active|Active|||": {
+      "weight": 509,
+      "risk": 0.40850000000000003,
+      "page": "/index.html",
+      "control": "a Active",
+      "reasons": [
+        "no direct handler 0.52",
+        "stale dependent view 0.54",
+        "severity 1.34 (conf 0.00)"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.17,
+        "logsConsoleError": 0.07,
+        "handlerBoundToControl": 0.48,
+        "updatesCorrectElements": 0.52,
+        "updatesAllDependentViews": 0.46,
+        "unguardedState": 0.26,
+        "needsRepetition": 0.15,
+        "severity": 1.34,
+        "severityConfidence": 0,
+        "model": "jev-1.13.0",
+        "inputTokens": 5830
+      }
+    },
+    "/index.html|a||||#/|All|||a.selected": {
+      "weight": 591,
+      "risk": 0.49149999999999994,
+      "page": "/index.html",
+      "control": "a.selected All",
+      "reasons": [
+        "no direct handler 0.79",
+        "stale dependent view 0.63",
+        "severity 1.22 (conf 0.00)"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.18,
+        "logsConsoleError": 0.06,
+        "handlerBoundToControl": 0.21,
+        "updatesCorrectElements": 0.54,
+        "updatesAllDependentViews": 0.37,
+        "unguardedState": 0.3,
+        "needsRepetition": 0.14,
+        "severity": 1.22,
+        "severityConfidence": 0,
+        "model": "jev-1.13.0",
+        "inputTokens": 7241
+      }
+    },
+    "/index.html|input|||||||checkbox|input.toggle": {
+      "weight": 482,
+      "risk": 0.38249999999999995,
+      "page": "/index.html",
+      "control": "input.toggle",
+      "reasons": [
+        "unguarded state 0.50",
+        "severity 1.05 (conf 0.08)"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.18,
+        "logsConsoleError": 0.06,
+        "handlerBoundToControl": 0.87,
+        "updatesCorrectElements": 0.53,
+        "updatesAllDependentViews": 0.59,
+        "unguardedState": 0.5,
+        "needsRepetition": 0.14,
+        "severity": 1.05,
+        "severityConfidence": 0.08,
+        "model": "jev-1.13.0",
+        "inputTokens": 7249
+      }
+    },
+    "/index.html|input|||||||checkbox|input.toggle-all": {
+      "weight": 637,
+      "risk": 0.5369999999999999,
+      "page": "/index.html",
+      "control": "input.toggle-all",
+      "reasons": [
+        "no direct handler 0.83",
+        "wrong update target 0.58",
+        "unguarded state 0.50",
+        "severity 1.30 (conf 0.00)"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.19,
+        "logsConsoleError": 0.06,
+        "handlerBoundToControl": 0.17,
+        "updatesCorrectElements": 0.42,
+        "updatesAllDependentViews": 0.58,
+        "unguardedState": 0.5,
+        "needsRepetition": 0.14,
+        "severity": 1.3,
+        "severityConfidence": 0,
+        "model": "jev-1.13.0",
+        "inputTokens": 6831
+      }
+    },
+    "/index.html|button|||||Clear completed|||button.clear-completed": {
+      "weight": 484,
+      "risk": 0.3835,
+      "page": "/index.html",
+      "control": "button.clear-completed Clear completed",
+      "reasons": [
+        "severity 1.37 (conf 0.06)"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.24,
+        "logsConsoleError": 0.08,
+        "handlerBoundToControl": 0.94,
+        "updatesCorrectElements": 0.65,
+        "updatesAllDependentViews": 0.63,
+        "unguardedState": 0.33,
+        "needsRepetition": 0.13,
+        "severity": 1.37,
+        "severityConfidence": 0.06,
+        "model": "jev-1.13.0",
+        "inputTokens": 6463
+      }
+    },
+    "/index.html|button||||||||button.destroy": {
+      "weight": 724,
+      "risk": 0.624,
+      "page": "/index.html",
+      "control": "button.destroy",
+      "reasons": [
+        "stale dependent view 0.63",
+        "severity 1.32 (conf 0.00)",
+        "never taken: +0.15 novelty"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.21,
+        "logsConsoleError": 0.07,
+        "handlerBoundToControl": 0.87,
+        "updatesCorrectElements": 0.69,
+        "updatesAllDependentViews": 0.37,
+        "unguardedState": 0.48,
+        "needsRepetition": 0.11,
+        "severity": 1.32,
+        "severityConfidence": 0,
+        "model": "jev-1.13.0",
+        "inputTokens": 5179
+      }
+    },
+    "/index.html|a||||#/active|Active|||a.selected": {
+      "weight": 694,
+      "risk": 0.5935,
+      "page": "/index.html",
+      "control": "a.selected Active",
+      "reasons": [
+        "no direct handler 0.55",
+        "stale dependent view 0.61",
+        "severity 1.26 (conf 0.00)",
+        "never taken: +0.15 novelty"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.2,
+        "logsConsoleError": 0.07,
+        "handlerBoundToControl": 0.45,
+        "updatesCorrectElements": 0.57,
+        "updatesAllDependentViews": 0.39,
+        "unguardedState": 0.34,
+        "needsRepetition": 0.14,
+        "severity": 1.26,
+        "severityConfidence": 0,
+        "model": "jev-1.13.0",
+        "inputTokens": 6224
+      }
+    },
+    "/index.html|a||||#/|All|||": {
+      "weight": 562,
+      "risk": 0.462,
+      "page": "/index.html",
+      "control": "a All",
+      "reasons": [
+        "no direct handler 0.73",
+        "stale dependent view 0.56",
+        "severity 1.13 (conf 0.00)"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.19,
+        "logsConsoleError": 0.07,
+        "handlerBoundToControl": 0.27,
+        "updatesCorrectElements": 0.57,
+        "updatesAllDependentViews": 0.44,
+        "unguardedState": 0.27,
+        "needsRepetition": 0.14,
+        "severity": 1.13,
+        "severityConfidence": 0,
+        "model": "jev-1.13.0",
+        "inputTokens": 7099
+      }
+    },
+    "/index.html|a||||#/completed|Completed|||a.selected": {
+      "weight": 579,
+      "risk": 0.4794999999999999,
+      "page": "/index.html",
+      "control": "a.selected Completed",
+      "reasons": [
+        "no direct handler 0.76",
+        "stale dependent view 0.55",
+        "severity 1.24 (conf 0.00)"
+      ],
+      "judgment": {
+        "throwsOrRejects": 0.17,
+        "logsConsoleError": 0.07,
+        "handlerBoundToControl": 0.24,
+        "updatesCorrectElements": 0.6,
+        "updatesAllDependentViews": 0.45,
+        "unguardedState": 0.3,
+        "needsRepetition": 0.13,
+        "severity": 1.24,
+        "severityConfidence": 0,
+        "model": "jev-1.13.0",
+        "inputTokens": 8003
+      }
+    }
+  }
+}

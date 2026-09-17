@@ -28,7 +28,18 @@ type Target = {
   key: string;
   fingerprint: Fingerprint;
   point: { x: number; y: number };
+  /** Extra context for the tooling; not part of the key. */
+  classes: string[];
+  html: string;
 };
+
+/** `tag.class.class`, used in the control key so that class-only controls
+ * (like `.toggle` vs `.toggle-all`) stay distinct. The tooling recovers this
+ * key from the trace by matching the click point against this snapshot. */
+function classPath(el: Element): string | null {
+  const classes = [...el.classList].filter(Boolean).sort();
+  return classes.length ? `${el.tagName.toLowerCase()}.${classes.join(".")}` : null;
+}
 
 export const clickTargets = extract((state): Target[] => {
   if (!state.document.body) return [];
@@ -41,7 +52,7 @@ export const clickTargets = extract((state): Target[] => {
     if (seen.has(el)) return;
     const point = clickablePoint(el);
     if (!point || !inViewport(state.window, point)) return;
-    const fingerprint = getFingerprint(el);
+    const fingerprint: Fingerprint = getFingerprint(el);
     out.push({
       key: controlKey(page, {
         tag: fingerprint.tag,
@@ -50,9 +61,14 @@ export const clickTargets = extract((state): Target[] => {
         text: fingerprint.textContent,
         testId: fingerprint.testId,
         name: fingerprint.nameAttr,
+        placeholder: fingerprint.placeholder,
+        inputType: fingerprint.inputType,
+        path: classPath(el) ?? fingerprint.structuralPath,
       }),
       fingerprint,
       point,
+      classes: [...el.classList],
+      html: el.outerHTML.slice(0, 300),
     });
     seen.add(el);
   };
@@ -91,7 +107,8 @@ export const clickTargets = extract((state): Target[] => {
     push(el);
   }
   return out;
-});
+
+}).named("clickTargets");
 
 export function weightedClicks(table: WeightTable) {
   return actions((): Tree<ActionTemplate> => {

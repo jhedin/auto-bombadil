@@ -4,6 +4,7 @@
  */
 import { writeFile } from "node:fs/promises";
 import { controlKey, type ControlFields } from "../bombadil/key.ts";
+import type { ControlInfo } from "./trace.ts";
 import type { CodeSlice } from "./link.ts";
 import { Judge, type Judgment } from "./judge.ts";
 import type { Graph } from "./trace.ts";
@@ -37,15 +38,19 @@ function clamp01(x: number): number {
 /** Risk that interacting with a non-link control produces a violation. */
 export function controlRisk(j: Judgment): { risk: number; reasons: string[] } {
   const reasons: string[] = [];
-  const severity = j.severity / 2;
-  const risk = clamp01(
-    0.4 * j.throwsOrRejects +
-      0.25 * j.logsConsoleError +
-      0.15 * j.unguardedState +
-      0.2 * severity,
+  const crash = Math.max(j.throwsOrRejects, 0.6 * j.logsConsoleError);
+  const inconsistency = Math.max(
+    1 - j.handlerBoundToControl,
+    1 - j.updatesCorrectElements,
+    1 - j.updatesAllDependentViews,
   );
+  const severity = j.severity / 2;
+  const risk = clamp01(0.35 * crash + 0.35 * inconsistency + 0.1 * j.unguardedState + 0.2 * severity);
   if (j.throwsOrRejects >= 0.5) reasons.push(`throws/rejects ${j.throwsOrRejects.toFixed(2)}`);
   if (j.logsConsoleError >= 0.5) reasons.push(`console.error ${j.logsConsoleError.toFixed(2)}`);
+  if (j.handlerBoundToControl < 0.5) reasons.push(`no direct handler ${(1 - j.handlerBoundToControl).toFixed(2)}`);
+  if (j.updatesCorrectElements < 0.5) reasons.push(`wrong update target ${(1 - j.updatesCorrectElements).toFixed(2)}`);
+  if (j.updatesAllDependentViews < 0.5) reasons.push(`stale dependent view ${(1 - j.updatesAllDependentViews).toFixed(2)}`);
   if (j.unguardedState >= 0.5) reasons.push(`unguarded state ${j.unguardedState.toFixed(2)}`);
   if (j.needsRepetition >= 0.5) reasons.push(`needs repetition ${j.needsRepetition.toFixed(2)}`);
   reasons.push(`severity ${j.severity.toFixed(2)} (conf ${j.severityConfidence.toFixed(2)})`);
@@ -58,7 +63,7 @@ export async function computeWeights(
   judge: Judge,
   log: (line: string) => void,
 ): Promise<WeightTable> {
-  type Item = { page: string; key: string; fields: ControlFields; slice: CodeSlice };
+  type Item = { page: string; key: string; fields: ControlInfo; slice: CodeSlice };
   const items: Item[] = [];
   for (const node of graph.nodes.values()) {
     for (const [key, fields] of node.controls) {
@@ -137,7 +142,7 @@ export async function computeWeights(
       weight: FLOOR + Math.round(SCALE * risk),
       risk,
       page: it.page,
-      control: `${it.fields.tag}${it.fields.id ? "#" + it.fields.id : ""} ${it.fields.text ?? it.fields.href ?? ""}`.trim(),
+      control: `${it.fields.path ?? it.fields.tag}${it.fields.id ? "#" + it.fields.id : ""} ${it.fields.text ?? it.fields.href ?? it.fields.placeholder ?? ""}`.trim(),
       reasons,
       ...(judgment ? { judgment } : {}),
     };

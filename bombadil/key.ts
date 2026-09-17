@@ -2,6 +2,9 @@
  * Stable identity for a clickable control, shared by the Bombadil
  * specification (runs inside Bombadil's JS runtime) and the Node tooling
  * (reads Bombadil's trace). Keep this file dependency-free.
+ *
+ * Every field here exists on Bombadil's own Fingerprint, so a key computed
+ * in the browser matches the key recomputed from a Click action in the trace.
  */
 export type ControlFields = {
   tag: string;
@@ -10,6 +13,10 @@ export type ControlFields = {
   text: string | null;
   testId?: string | null;
   name?: string | null;
+  placeholder?: string | null;
+  inputType?: string | null;
+  /** Bombadil's structural path, or our own `tag.class.class` selector. */
+  path?: string | null;
 };
 
 export function pathnameOf(url: string): string {
@@ -28,5 +35,8 @@ export function controlKey(page: string, f: ControlFields): string {
     f.name ?? "",
     f.href ?? "",
     text,
+    f.placeholder ?? "",
+    f.inputType ?? "",
+    f.path ?? "",
   ].join("|");
 }

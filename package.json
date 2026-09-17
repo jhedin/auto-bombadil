@@ -8,7 +8,8 @@
     "auto:graph": "node src/cli.ts graph",
     "auto:weights": "node src/cli.ts weights",
     "auto:compare": "node src/cli.ts compare",
-    "typecheck": "tsc -p tsconfig.json && tsc -p bombadil/tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json && tsc -p bombadil/tsconfig.json",
+    "auto:run": "node src/cli.ts run"
   },
   "repository": {
     "type": "git",

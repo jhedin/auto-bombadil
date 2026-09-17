@@ -7,12 +7,17 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { TypeSafeClient, noul, score } from "@typesafe-ai/sdk";
-import type { ControlFields } from "../bombadil/key.ts";
 import type { CodeSlice } from "./link.ts";
+import type { ControlInfo } from "./trace.ts";
 
 export type Judgment = {
+  // Crash-type failures
   throwsOrRejects: number;
   logsConsoleError: number;
+  // Consistency-type failures (what UI invariants catch)
+  handlerBoundToControl: number;
+  updatesCorrectElements: number;
+  updatesAllDependentViews: number;
   unguardedState: number;
   needsRepetition: number;
   severity: number;
@@ -22,20 +27,20 @@ export type Judgment = {
 };
 
 const SEVERITY = [
-  "Interacting with the control cannot fail; the handler is trivial or absent",
-  "A failure would be cosmetic or recoverable, such as a wrong count or stale text",
-  "A failure would be an uncaught exception, an unhandled promise rejection, or a console error",
+  "Interacting with the control cannot go wrong; the handler is trivial or absent",
+  "Something cosmetic or recoverable could go wrong, such as a wrong count or stale text",
+  "Visible state could end up contradicting the model, or an uncaught error could occur",
 ] as const;
 
 export function questionsFor() {
+  const inspect = ["`control`", "`scripts`"];
   return {
     throws_or_rejects: noul(
       {
         question:
           "Can interacting with `control`, once or repeatedly, cause code in `scripts` to throw an uncaught exception or reject a promise that nothing handles?",
-        inspect: ["`control.html`", "`scripts`"],
-        focus:
-          "Trace the event handler attached to the control. Count a rejection as unhandled if no .catch or try/await handles it.",
+        inspect,
+        focus: "Trace the event handler attached to the control. Count a rejection as unhandled if no .catch or try/await handles it.",
       },
       {
         true: "Some sequence of interactions reaches a throw or an unhandled reject",
@@ -44,20 +49,58 @@ export function questionsFor() {
     ),
     logs_console_error: noul(
       {
-        question:
-          "Can interacting with `control`, once or repeatedly, cause code in `scripts` to call console.error?",
-        inspect: ["`control.html`", "`scripts`"],
+        question: "Can interacting with `control`, once or repeatedly, cause code in `scripts` to call console.error?",
+        inspect,
       },
       {
         true: "Some sequence of interactions reaches a console.error call",
         false: "No console.error call is reachable from this control",
       },
     ),
+    handler_bound_to_control: noul(
+      {
+        question:
+          "When the user interacts with `control` directly (a click or key press on this exact element), does code in `scripts` run in response?",
+        inspect,
+        focus:
+          "A handler bound only to a related element, such as a label, wrapper, or sibling, does not count. Event delegation from an ancestor that matches this element does count.",
+      },
+      {
+        true: "A handler runs for direct interaction with this element",
+        false: "Only a related element has a handler, or the element has none",
+      },
+    ),
+    updates_correct_elements: noul(
+      {
+        question:
+          "After `control` is used, does every DOM update that the code performs write to the element it is meant to change?",
+        inspect,
+        focus:
+          "Check each assignment to a DOM property such as checked, value, textContent, className, or style against the element it is applied to.",
+      },
+      {
+        true: "Each update targets the element that should change",
+        false: "Some update writes to a different element than the one it should change, or to a property that has no effect there",
+      },
+    ),
+    updates_all_dependent_views: noul(
+      {
+        question:
+          "After `control` changes the model, does the code refresh every part of the view that depends on that change?",
+        inspect,
+        focus:
+          "Dependent parts include counters, buttons whose visibility depends on the data, an all-selected control, filtered lists, and empty-state sections.",
+      },
+      {
+        true: "All dependent parts are refreshed",
+        false: "At least one dependent part is left stale",
+      },
+    ),
     unguarded_state: noul(
       {
         question:
           "Does the handler for `control` in `scripts` change application state without checking bounds, nullness, or input validity?",
-        inspect: ["`control.html`", "`scripts`"],
+        inspect,
         focus: "Only the state the handler itself mutates.",
       },
       {
@@ -67,9 +110,8 @@ export function questionsFor() {
     ),
     needs_repetition: noul(
       {
-        question:
-          "If the handler for `control` in `scripts` can fail, does the failure require interacting with the control more than once?",
-        inspect: ["`control.html`", "`scripts`"],
+        question: "If the handler for `control` in `scripts` can fail, does the failure require interacting with the control more than once?",
+        inspect,
       },
       {
         true: "A counter or threshold must be reached first",
@@ -78,9 +120,8 @@ export function questionsFor() {
     ),
     failure_severity: score(
       {
-        question:
-          "How severe is the worst failure that interacting with `control` can cause, given `scripts`?",
-        inspect: ["`control.html`", "`scripts`"],
+        question: "How severe is the worst outcome that interacting with `control` can produce, given `scripts`?",
+        inspect,
       },
       SEVERITY,
     ),
@@ -112,14 +153,14 @@ export class Judge {
     await writeFile(this.cachePath, JSON.stringify(this.cache, null, 2) + "\n");
   }
 
-  static cacheKey(f: ControlFields, slice: CodeSlice): string {
+  static cacheKey(f: ControlInfo, slice: CodeSlice): string {
     return createHash("sha256")
-      .update(JSON.stringify([f, slice.element, slice.scripts]))
+      .update(JSON.stringify([f, slice.element, slice.code]))
       .digest("hex")
       .slice(0, 24);
   }
 
-  async judge(f: ControlFields, slice: CodeSlice): Promise<{ judgment: Judgment; cached: boolean }> {
+  async judge(f: ControlInfo, slice: CodeSlice): Promise<{ judgment: Judgment; cached: boolean }> {
     const key = Judge.cacheKey(f, slice);
     const hit = this.cache[key];
     if (hit) return { judgment: hit, cached: true };
@@ -129,12 +170,14 @@ export class Judge {
       control: {
         tag: f.tag,
         id: f.id,
+        classes: f.classes,
         href: f.href,
         text: f.text,
+        placeholder: f.placeholder ?? null,
         html: slice.element,
       },
-      scripts: slice.scripts,
-      note: "The page is a small static HTML app. `scripts` holds every inline script on the page, in order.",
+      scripts: slice.code,
+      note: "A browser app. `scripts` holds the page's script sources in load order; an entry may be an excerpt around lines that mention the control.",
     };
     const { answers, model, usage } = await this.client.systemOne({
       state,
@@ -143,6 +186,9 @@ export class Judge {
     const judgment: Judgment = {
       throwsOrRejects: answers.throws_or_rejects.noul,
       logsConsoleError: answers.logs_console_error.noul,
+      handlerBoundToControl: answers.handler_bound_to_control.noul,
+      updatesCorrectElements: answers.updates_correct_elements.noul,
+      updatesAllDependentViews: answers.updates_all_dependent_views.noul,
       unguardedState: answers.unguarded_state.noul,
       needsRepetition: answers.needs_repetition.noul,
       severity: answers.failure_severity.score,
