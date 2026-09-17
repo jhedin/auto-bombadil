@@ -81,7 +81,12 @@ export type Graph = {
 };
 
 export async function readTrace(path: string): Promise<TraceEntry[]> {
-  const text = await readFile(path, "utf8");
+  let text: string;
+  try {
+    text = await readFile(path, "utf8");
+  } catch {
+    return [];
+  }
   return text
     .split("\n")
     .filter((l) => l.trim())

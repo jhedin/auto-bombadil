@@ -46,6 +46,9 @@ See README.md for the full loop. Key points for changes:
   answers narrow questions about a control's source in `src/judge.ts`.
 - `bombadil/key.ts` is shared between the spec (runs in Bombadil's embedded
   JS engine, no Node APIs, no network) and the Node tooling. Keep it plain.
+- `src/discover.ts` must compute keys exactly as `bombadil/policy.ts` does
+  in the browser; when changing either, check both apps' static keys still
+  match their traced keys.
 - Judgments are cached in `.auto-bombadil/judgments.json` by code hash.
   Changing a question in `src/judge.ts` needs a cache clear to take effect.
 - A top-level spec may export only properties and action generators. Keep

@@ -8,6 +8,7 @@ import type { ControlInfo } from "./trace.ts";
 import type { CodeSlice } from "./link.ts";
 import { Judge, type Judgment } from "./judge.ts";
 import type { Graph } from "./trace.ts";
+import { discoverControls } from "./discover.ts";
 import { sliceFor } from "./link.ts";
 
 export const FLOOR = 100;
@@ -65,11 +66,21 @@ export async function computeWeights(
 ): Promise<WeightTable> {
   type Item = { page: string; key: string; fields: ControlInfo; slice: CodeSlice };
   const items: Item[] = [];
+  const seen = new Set<string>();
   for (const node of graph.nodes.values()) {
     for (const [key, fields] of node.controls) {
+      seen.add(key);
       items.push({ page: node.page, key, fields, slice: await sliceFor(siteRoot, node.page, fields) });
     }
   }
+  // Controls the static HTML declares that no run has seen yet (or ever).
+  let discovered = 0;
+  for (const [key, { page, control }] of await discoverControls(siteRoot)) {
+    if (seen.has(key)) continue;
+    discovered++;
+    items.push({ page, key, fields: control, slice: await sliceFor(siteRoot, page, control) });
+  }
+  log(`${seen.size} controls from the trace, ${discovered} more from static HTML`);
 
   // Judge every non-link control. Links are weighted by their destination.
   const judged = new Map<string, { judgment: Judgment; risk: number; reasons: string[] }>();

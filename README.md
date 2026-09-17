@@ -9,19 +9,32 @@ those weights.
 
 Bombadil's specification runtime has no network access, so this is a batch
 loop rather than a live one. Every command takes `--app example` (default)
-or `--app todomvc`:
+or `--app todomvc`.
 
-1. `npm run auto:run -- --app todomvc --time 30s` serves the app, runs the
-   uniform baseline spec once without stopping at violations, and leaves a
-   trace under `.auto-bombadil/`.
-2. `npm run auto:graph -- --app todomvc` prints the state graph the trace
-   implies: pages, edges, and which edges led to violations.
-3. `npm run auto:weights -- --app todomvc` maps every control Bombadil saw
-   to its source, asks Jev about it (cached by code hash), propagates risk
-   backwards through links, and writes the app's weight table.
-4. `npm run auto:compare -- --app todomvc --runs 4 --time 60s` runs the
-   uniform spec and the weighted spec back to back with exit on first
-   violation and reports time to first violation.
+The short path needs no exploratory run first:
+
+1. `npm run auto:weights -- --app todomvc` discovers controls from the app's
+   static HTML, maps each to its source, asks Jev about it (cached by code
+   hash), propagates risk backwards through links, and writes the app's
+   weight table. If a trace from an earlier run exists it is merged in, which
+   adds controls that only appear after interaction (rendered list items).
+2. `npm run auto:run -- --app todomvc --spec todomvc --time 60s` runs the
+   weighted spec. On a violation it prints Bombadil's `--reproduce` command,
+   which replays that exact action sequence in seconds instead of exploring
+   again.
+
+The full loop adds a baseline and a graph:
+
+- `npm run auto:run -- --app todomvc --time 30s` runs the uniform spec
+  without stopping at violations and leaves a trace under `.auto-bombadil/`.
+- `npm run auto:graph -- --app todomvc` prints the state graph the trace
+  implies: pages, edges, and which edges led to violations.
+- `npm run auto:compare -- --app todomvc --runs 4 --time 60s` runs the
+  uniform spec and the weighted spec back to back with exit on first
+  violation and reports time to first violation.
+
+The committed weight tables (`bombadil/*weights.json`) already carry Jev's
+judgments for both apps, so the weighted specs run with no API key at all.
 
 Set `TYPESAFE_API_KEY` in `.env` first; see `.env.example`. In a root
 container also set `BOMBADIL_EXTRA_ARGS="--no-sandbox --chrome-grant-permissions="`

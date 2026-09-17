@@ -90,6 +90,9 @@ async function main(): Promise<void> {
       const r = await runBombadil(spec, out, values.time!, false);
       close?.();
       console.log(`${spec}: ${r.seconds.toFixed(1)}s exit=${r.exit} violations: ${r.violations.join(", ") || "none"}; trace at ${out}/trace.jsonl`);
+      if (r.exit === 2) {
+        console.log(`replay this failure without exploring: npx bombadil browser test --headless ${extraArgs().join(" ")} --reproduce ${out} ${ORIGIN} bombadil/${spec}.ts`);
+      }
       return;
     }
     case "graph": {
@@ -99,7 +102,9 @@ async function main(): Promise<void> {
     }
     case "weights": {
       const trace = rest[0] ?? app.trace;
-      const graph = buildGraph(await readTrace(trace));
+      const entries = await readTrace(trace);
+      console.log(entries.length ? `trace: ${trace} (${entries.length} states)` : `no trace at ${trace}; discovering controls from ${app.root} only`);
+      const graph = buildGraph(entries);
       const judge = new Judge(CACHE, process.env["TYPESAFE_MODEL"]);
       await judge.load();
       const table = await computeWeights(graph, app.root, judge, console.log);
