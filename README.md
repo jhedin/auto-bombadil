@@ -45,3 +45,21 @@ to first violation. Set `TYPESAFE_API_KEY` in `.env` first; see
 | `src/weights.ts` | Policy: judgments and graph statistics to weights |
 | `src/cli.ts` | `serve`, `graph`, `weights`, `compare` |
 | `examples/site` | Example pages from Bombadil's integration tests (MIT) |
+
+## First measurement
+
+Four runs each, 45 second cap, exit on first violation, wall clock including
+browser startup, on the example site with weights judged from one prior
+25 second uniform run:
+
+| Policy | Runs with a violation | Time to first violation, mean | Median |
+| --- | --- | --- | --- |
+| Uniform | 4 of 4 | 5.7 s | 3.4 s |
+| Jev-weighted | 4 of 4 | 3.9 s | 2.1 s |
+
+The example site is small and every bug is three clicks from the hub, so
+both policies find one quickly and four runs are too few to call the gap
+significant. What the weights got right is visible in `bombadil/weights.json`:
+the three buggy buttons and the broken link rank at the top, the safe
+counters and inputs at the bottom, and hub links inherit the risk of the
+pages they lead to. A larger app with rarer bugs is the real test.
