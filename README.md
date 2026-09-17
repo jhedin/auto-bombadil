@@ -98,3 +98,20 @@ significant. What the weights got right is visible in `bombadil/weights.json`:
 the three buggy buttons and the broken link rank at the top, the safe
 counters and inputs at the bottom, and hub links inherit the risk of the
 pages they lead to. A larger app with rarer bugs is the real test.
+
+### TodoMVC
+
+Four runs each, 60 second cap, exit on first violation, weights judged from
+one prior 30 second uniform run. Every violation was `toggleAllReflectsItems`.
+
+| Policy | Runs with a violation | Time to first violation, mean | Median | Per run |
+| --- | --- | --- | --- | --- |
+| Uniform | 3 of 4 | 38.0 s | 48.4 s | timeout, 48.4, 6.8, 58.9 |
+| Jev-weighted | 4 of 4 | 13.9 s | 14.1 s | 14.1, 11.5, 2.3, 27.8 |
+
+The weighted policy was faster in every pair, by 2.7x on average, on a bug
+that neither the questions nor the weights were written to target. Still
+four runs, so treat the ratio as a signal rather than a measurement. Bombadil
+runs slowly on this app (about two states per second) because the default
+input generator types long random strings, which is what makes the time
+difference visible.
