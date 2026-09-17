@@ -37,11 +37,13 @@ function clamp01(x: number): number {
 }
 
 /** Risk that interacting with a non-link control produces a violation. */
-export function controlRisk(j: Judgment): { risk: number; reasons: string[] } {
+export function controlRisk(j: Judgment, tag: string): { risk: number; reasons: string[] } {
   const reasons: string[] = [];
   const crash = Math.max(j.throwsOrRejects, 0.6 * j.logsConsoleError);
+  // A link navigates natively; it needs no handler. Known rule, kept in code.
+  const handlerBound = tag === "a" ? 1 : j.handlerBoundToControl;
   const inconsistency = Math.max(
-    1 - j.handlerBoundToControl,
+    1 - handlerBound,
     1 - j.updatesCorrectElements,
     1 - j.updatesAllDependentViews,
     1 - j.keepsRouteInSync,
@@ -50,7 +52,7 @@ export function controlRisk(j: Judgment): { risk: number; reasons: string[] } {
   const risk = clamp01(0.35 * crash + 0.35 * inconsistency + 0.1 * j.unguardedState + 0.2 * severity);
   if (j.throwsOrRejects >= 0.5) reasons.push(`throws/rejects ${j.throwsOrRejects.toFixed(2)}`);
   if (j.logsConsoleError >= 0.5) reasons.push(`console.error ${j.logsConsoleError.toFixed(2)}`);
-  if (j.handlerBoundToControl < 0.5) reasons.push(`no direct handler ${(1 - j.handlerBoundToControl).toFixed(2)}`);
+  if (handlerBound < 0.5) reasons.push(`no direct handler ${(1 - handlerBound).toFixed(2)}`);
   if (j.updatesCorrectElements < 0.5) reasons.push(`wrong update target ${(1 - j.updatesCorrectElements).toFixed(2)}`);
   if (j.updatesAllDependentViews < 0.5) reasons.push(`stale dependent view ${(1 - j.updatesAllDependentViews).toFixed(2)}`);
   if (j.keepsRouteInSync < 0.5) reasons.push(`route out of sync ${(1 - j.keepsRouteInSync).toFixed(2)}`);
@@ -95,7 +97,7 @@ export async function computeWeights(
       .map(async (it) => {
         const { judgment, cached: hit } = await judge.judge(it.fields, it.slice);
         hit ? cached++ : asked++;
-        const { risk, reasons } = controlRisk(judgment);
+        const { risk, reasons } = controlRisk(judgment, it.fields.tag);
         judged.set(it.key, { judgment, risk, reasons });
         pageRisk.set(it.page, Math.max(pageRisk.get(it.page) ?? 0, risk));
       }),
